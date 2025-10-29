@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Book Borrowing - Library System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-blue-500 to-purple-600 min-h-screen">
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-book-reader text-3xl text-blue-600 mr-3"></i>
+                    <span class="text-xl font-bold text-gray-800">Library System</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'admin_dashboard' %}" class="text-gray-700 hover:text-blue-600">
+                        <i class="fas fa-home mr-1"></i> Dashboard
+                    </a>
+                    <a href="{% url 'logout' %}" class="text-gray-700 hover:text-red-600">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">
+                    <i class="fas fa-clock text-yellow-500"></i> Pending Book Borrowing Requests
+                </h2>
+                <a href="{% url 'admin_dashboard' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 p-4 rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if pending_transactions %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Transaction Code</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Student</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Books</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Borrowed Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Due Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Created By</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for transaction in pending_transactions %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-sm font-mono">{{ transaction.transaction_code }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    <div class="font-semibold">{{ transaction.student.get_full_name }}</div>
+                                    <div class="text-gray-500">{{ transaction.student.student_id }}</div>
+                                </td>
+                                <td class="px-6 py-4 text-sm">
+                                    <div class="font-semibold">{{ transaction.items.count }} book(s)</div>
+                                    {% for item in transaction.items.all %}
+                                        <div class="text-gray-600 text-xs">• {{ item.book.title }}</div>
+                                    {% endfor %}
+                                </td>
+                                <td class="px-6 py-4 text-sm">{{ transaction.borrowed_date|date:"M d, Y H:i" }}</td>
+                                <td class="px-6 py-4 text-sm">{{ transaction.due_date|date:"M d, Y" }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    {% if transaction.created_by %}
+                                        {{ transaction.created_by.username }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-sm">
+                                    <div class="flex space-x-2">
+                                        <form method="POST" action="{% url 'approve_transaction' transaction.id %}" class="inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs" onclick="return confirm('Approve this book borrowing request?')">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{% url 'reject_transaction' transaction.id %}" class="inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs" onclick="return confirm('Reject this book borrowing request?')">
+                                                <i class="fas fa-times"></i> Reject
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-check-circle text-6xl text-green-500 mb-4"></i>
+                    <p class="text-xl text-gray-600">No pending book borrowing requests</p>
+                    <p class="text-gray-500 mt-2">All book borrowing requests have been processed!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Import Students{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-file-import mr-2 text-blue-600"></i>Import Students from CSV</h1>
+    
+    <div class="bg-blue-50 border-l-4 border-blue-600 p-4 mb-6">
+        <h3 class="font-semibold text-blue-800 mb-2">CSV Format Required:</h3>
+        <p class="text-sm text-gray-700">student_id, last_name, first_name, middle_name, course, year, section</p>
+        <p class="text-xs text-gray-600 mt-2">Note: All fields are required except middle_name</p>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Select CSV File</label>
+            {{ form.csv_file }}
+        </div>
+        
+        <div class="flex gap-4">
+            <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold">
+                <i class="fas fa-upload mr-2"></i>Import Students
+            </button>
+            <a href="{% url 'admin_dashboard' %}" class="flex-1 bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition font-semibold text-center">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

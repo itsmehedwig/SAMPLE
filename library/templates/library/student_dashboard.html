@@ -1,0 +1,108 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center space-x-4">
+            {% if student.profile_photo %}
+                <img src="{{ student.profile_photo.url }}" alt="Profile" class="w-20 h-20 rounded-full object-cover">
+            {% else %}
+                <div class="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl">
+                    {{ student.first_name.0 }}{{ student.last_name.0 }}
+                </div>
+            {% endif %}
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Welcome, {{ student.first_name }}!</h1>
+                <p class="text-gray-600">{{ student.course }} - {{ student.year }} {{ student.section }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-book-open mr-2 text-blue-600"></i>Currently Borrowed</h2>
+        {% if borrowed_books %}
+            <div class="space-y-3">
+                {% for transaction in borrowed_books %}
+                    <div class="border-l-4 border-blue-600 pl-4 py-2">
+                        <p class="text-xs text-gray-500 mb-1">Code: {{ transaction.transaction_code }}</p>
+                        <p class="text-sm text-gray-600 mb-2">Due: {{ transaction.due_date|date:"Y-m-d" }}</p>
+                        {% for item in transaction.items.all %}
+                            <p class="font-semibold">{{ item.book.title }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500">No books currently borrowed</p>
+        {% endif %}
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-history mr-2 text-green-600"></i>Recent History</h2>
+        {% if history %}
+            <div class="space-y-2">
+                {% for transaction in history|slice:":5" %}
+                    <div class="text-sm">
+                        <p class="text-xs text-gray-500">{{ transaction.transaction_code }} - {{ transaction.items.count }} book(s)</p>
+                        <p class="text-gray-600">{{ transaction.borrowed_date|date:"M d, Y" }} - 
+                            <span class="{% if transaction.status == 'returned' %}text-green-600{% else %}text-blue-600{% endif %}">
+                                {{ transaction.status|title }}
+                            </span>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500">No history available</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-books mr-2 text-purple-600"></i>Browse Books</h2>
+    
+    <div class="mb-6">
+        <form method="get" class="flex gap-4">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search by title, author, or ISBN..." 
+                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg">
+            <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                <i class="fas fa-search mr-2"></i>Search
+            </button>
+        </form>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for book in books %}
+            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition">
+                <h3 class="font-bold text-gray-800">{{ book.title }}</h3>
+                <p class="text-sm text-gray-600">by {{ book.author }}</p>
+                <p class="text-xs text-gray-500 mt-2">ISBN: {{ book.isbn }}</p>
+                <p class="text-xs text-gray-500">Category: {{ book.category }}</p>
+                <div class="mt-3">
+                    {% if book.is_available %}
+                        <span class="inline-block bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">
+                            <i class="fas fa-check-circle mr-1"></i>Available ({{ book.copies_available }})
+                        </span>
+                    {% else %}
+                        <span class="inline-block bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full">
+                            <i class="fas fa-times-circle mr-1"></i>Not Available
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="col-span-3 text-center text-gray-500">No books found</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

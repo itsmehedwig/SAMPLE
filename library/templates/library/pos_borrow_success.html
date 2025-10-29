@@ -1,0 +1,47 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Borrowing Success{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+    <div class="text-center mb-6">
+        <i class="fas fa-clock text-6xl text-yellow-500 mb-4"></i>
+        <h1 class="text-3xl font-bold text-gray-800">Borrowing Request Submitted!</h1>
+        <p class="text-gray-600 mt-2">Pending Admin Approval</p>
+    </div>
+    
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
+        <h3 class="font-semibold text-gray-800 mb-4">eInvoice</h3>
+        <div class="space-y-2 mb-4">
+            <p><strong>Student:</strong> {{ student.get_full_name }}</p>
+            <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+            <p><strong>Course:</strong> {{ student.course }} - {{ student.year }} {{ student.section }}</p>
+        </div>
+        
+        <div class="border-t border-gray-300 pt-4">
+            <h4 class="font-semibold mb-2">Transaction Details:</h4>
+            <p class="text-sm text-gray-600 mb-3">Transaction Code: <span class="font-mono bg-gray-200 px-2 py-1 rounded">{{ transaction.transaction_code }}</span></p>
+            <p class="text-sm text-gray-600 mb-3">Due Date: {{ transaction.due_date|date:"Y-m-d" }}</p>
+            <h4 class="font-semibold mb-2">Books Borrowed:</h4>
+            {% for item in transaction.items.all %}
+                <div class="border-l-4 border-blue-600 pl-4 py-2 mb-3">
+                    <p class="font-semibold">{{ item.book.title }}</p>
+                    <p class="text-sm text-gray-600">ISBN: {{ item.book.isbn }}</p>
+                    <p class="text-sm text-gray-600">Author: {{ item.book.author }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="bg-yellow-50 border-l-4 border-yellow-600 p-4 mb-6">
+        <p class="text-sm text-yellow-800"><i class="fas fa-info-circle mr-1"></i> This book borrowing request requires admin approval before the student can receive the books.</p>
+    </div>
+</div>
+
+<!-- Auto redirect to dashboard after 5 seconds -->
+<script>
+    setTimeout(function() {
+        window.location.href = "{% url 'pos_home' %}";
+    }, 5000); // 5000ms = 5 seconds
+</script>
+{% endblock %}

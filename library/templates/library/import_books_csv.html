@@ -1,0 +1,74 @@
+{% extends 'library/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Import Books from CSV{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">
+        <i class="fas fa-file-import mr-3 text-blue-600"></i>Import Books from CSV
+    </h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mb-4 p-4 rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">CSV Format Instructions</h2>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
+            <p class="text-sm text-gray-700 mb-3">Your CSV file should have the following columns:</p>
+            <div class="bg-white border border-gray-300 rounded p-4 mb-4">
+                <code class="text-sm text-blue-600">isbn,title,author,category,publisher,year_published,copies_total,description</code>
+            </div>
+            
+            <div class="space-y-2 text-sm text-gray-700">
+                <p><strong>Required fields:</strong></p>
+                <ul class="list-disc ml-6 space-y-1">
+                    <li><strong>isbn</strong> - International Standard Book Number (unique identifier)</li>
+                    <li><strong>title</strong> - Book title</li>
+                    <li><strong>author</strong> - Author name</li>
+                    <li><strong>category</strong> - Book category/genre</li>
+                </ul>
+                
+                <p class="mt-3"><strong>Optional fields:</strong></p>
+                <ul class="list-disc ml-6 space-y-1">
+                    <li><strong>publisher</strong> - Publisher name (can be empty)</li>
+                    <li><strong>year_published</strong> - Year of publication (can be empty)</li>
+                    <li><strong>copies_total</strong> - Number of copies (defaults to 1 if empty)</li>
+                    <li><strong>description</strong> - Book description (can be empty)</li>
+                </ul>
+            </div>
+            
+            <div class="mt-4 bg-blue-50 border-l-4 border-blue-600 p-4">
+                <p class="text-sm text-blue-800"><strong>Example CSV row:</strong></p>
+                <code class="text-xs text-blue-900">9780134685991,Effective Java,Joshua Bloch,Programming,Addison-Wesley,2018,3,A comprehensive guide to Java programming best practices</code>
+            </div>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            {{ form|crispy }}
+            
+            <div class="flex space-x-4">
+                <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold">
+                    <i class="fas fa-upload mr-2"></i>Import Books
+                </button>
+                <a href="{% url 'manage_books' %}" class="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition font-semibold text-center">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="bg-yellow-50 border-l-4 border-yellow-600 p-4">
+        <p class="text-sm text-yellow-800">
+            <i class="fas fa-info-circle mr-2"></i>
+            <strong>Note:</strong> Books with duplicate ISBN numbers will be skipped. The system will report how many books were successfully imported and how many errors occurred.
+        </p>
+    </div>
+</div>
+{% endblock %}

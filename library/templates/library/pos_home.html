@@ -1,0 +1,78 @@
+{% extends 'library/base.html' %}
+
+{% block title %}POS System - Student Login{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+    .fullscreen-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding-bottom: 10vh;
+        z-index: 1;
+    }
+    .logo-section {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    main.container {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+    }
+</style>
+
+<div class="fullscreen-container">
+    <div class="logo-section">
+        <i class="fas fa-book-reader text-white text-9xl mb-8 animate-pulse"></i>
+        <h1 class="text-white text-6xl font-bold mb-4">Library POS</h1>
+        <p class="text-white text-2xl opacity-90">Point of Service System</p>
+    </div>
+    
+    <div class="w-full max-w-2xl px-8">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label class="block text-white text-xl font-semibold mb-4 text-center">
+                    <i class="fas fa-id-card mr-2"></i>Enter Student ID
+                </label>
+                <input 
+                    type="text" 
+                    name="student_id" 
+                    required 
+                    autofocus
+                    class="w-full px-8 py-6 text-3xl text-center border-4 border-white rounded-2xl bg-white bg-opacity-90 focus:bg-opacity-100 focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
+                    placeholder="Student ID"
+                >
+            </div>
+            <button 
+                type="submit" 
+                class="w-full bg-white text-blue-600 py-6 rounded-2xl hover:bg-blue-50 transition font-bold text-2xl shadow-2xl transform hover:scale-105">
+                <i class="fas fa-arrow-right mr-3"></i>Continue
+            </button>
+        </form>
+        
+        <div class="mt-8 text-center">
+            <p class="text-white text-sm opacity-75">
+                <i class="fas fa-info-circle mr-2"></i>Scan QR code or tap NFC card to login quickly
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

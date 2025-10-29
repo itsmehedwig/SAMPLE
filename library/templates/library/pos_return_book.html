@@ -1,0 +1,158 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Return Book - POS{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl p-8">
+    <div class="flex items-center justify-between border-b-2 border-gray-200 pb-4 mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">
+            <i class="fas fa-undo-alt mr-3 text-blue-600"></i>Return Books
+        </h1>
+        <a href="{% url 'pos_home' %}" class="text-gray-500 hover:text-gray-700 transition">
+            <i class="fas fa-times-circle text-3xl"></i>
+        </a>
+    </div>
+    
+    {% if step == 'select_books' or step == 'confirm' %}
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-600 rounded-lg p-6 mb-8 shadow-md">
+        <h3 class="font-bold text-blue-900 text-xl mb-3">
+            <i class="fas fa-user-circle mr-2"></i>Student Information
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-700">
+            <p class="text-lg"><strong>Name:</strong> {{ student.get_full_name }}</p>
+            <p class="text-lg"><strong>Student ID:</strong> {{ student.student_id }}</p>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if step == 'select_books' %}
+        <div class="mb-8">
+            <h3 class="font-bold text-2xl mb-6 text-gray-800">
+                <i class="fas fa-list-check mr-2 text-blue-600"></i>Select Books to Return
+            </h3>
+            
+            {% if borrowed_items %}
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="bg-gray-50 rounded-lg p-6 border-2 border-gray-200">
+                        <table class="w-full">
+                            <thead class="bg-gray-200 border-b-2 border-gray-300">
+                                <tr>
+                                    <th class="px-4 py-3 text-center font-bold text-gray-700">
+                                        <input type="checkbox" id="select-all" class="w-5 h-5 cursor-pointer">
+                                    </th>
+                                    <th class="px-4 py-3 text-left font-bold text-gray-700">Book Title</th>
+                                    <th class="px-4 py-3 text-left font-bold text-gray-700">ISBN</th>
+                                    <th class="px-4 py-3 text-left font-bold text-gray-700">Author</th>
+                                    <th class="px-4 py-3 text-left font-bold text-gray-700">Borrowed Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in borrowed_items %}
+                                    <tr class="border-b border-gray-200 hover:bg-blue-50 transition">
+                                        <td class="px-4 py-3 text-center">
+                                            <input type="checkbox" name="book_ids" value="{{ item.id }}" 
+                                                class="book-checkbox w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="px-4 py-3 font-bold text-gray-800">{{ item.book.title }}</td>
+                                        <td class="px-4 py-3 text-gray-600 font-mono">{{ item.book.isbn }}</td>
+                                        <td class="px-4 py-3 text-gray-600">{{ item.book.author }}</td>
+                                        <td class="px-4 py-3 text-gray-600">{{ item.borrowed_date|date:"Y-m-d" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="mt-4 text-right">
+                            <p class="text-lg font-bold text-gray-700">
+                                Total Borrowed: <span class="text-blue-600">{{ borrowed_items|length }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" name="review_return" 
+                        class="w-full bg-blue-600 text-white py-5 rounded-lg hover:bg-blue-700 transition font-bold text-xl shadow-2xl transform hover:scale-105">
+                        <i class="fas fa-arrow-right mr-2"></i>Continue to Review
+                    </button>
+                </form>
+            {% else %}
+                <div class="bg-yellow-50 border-l-4 border-yellow-600 p-6 rounded-r-lg">
+                    <p class="text-yellow-800 text-lg">
+                        <i class="fas fa-info-circle mr-2"></i>This student has no borrowed books to return.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+        
+    {% elif step == 'confirm' %}
+        <div class="mb-8">
+            <h3 class="font-bold text-2xl mb-6 text-gray-800 text-center">
+                <i class="fas fa-check-circle mr-2 text-blue-600"></i>Review Books to Return
+            </h3>
+            <div class="bg-gray-50 rounded-lg p-6 border-2 border-gray-200">
+                <table class="w-full">
+                    <thead class="bg-gray-200 border-b-2 border-gray-300">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-bold text-gray-700">#</th>
+                            <th class="px-4 py-3 text-left font-bold text-gray-700">Book Title</th>
+                            <th class="px-4 py-3 text-left font-bold text-gray-700">ISBN</th>
+                            <th class="px-4 py-3 text-left font-bold text-gray-700">Author</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in selected_items %}
+                            <tr class="border-b border-gray-200 hover:bg-blue-50 transition">
+                                <td class="px-4 py-3 font-semibold text-gray-600">{{ forloop.counter }}</td>
+                                <td class="px-4 py-3 font-bold text-gray-800">{{ item.book.title }}</td>
+                                <td class="px-4 py-3 text-gray-600 font-mono">{{ item.book.isbn }}</td>
+                                <td class="px-4 py-3 text-gray-600">{{ item.book.author }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="mt-4 text-right">
+                    <p class="text-lg font-bold text-gray-700">
+                        Books to Return: <span class="text-blue-600">{{ selected_items|length }}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% for item in selected_items %}
+                <input type="hidden" name="book_ids" value="{{ item.id }}">
+            {% endfor %}
+            <button type="submit" name="confirm_return" 
+                class="w-full bg-blue-600 text-white py-5 rounded-lg hover:bg-blue-700 transition font-bold text-xl shadow-2xl transform hover:scale-105">
+                <i class="fas fa-check-circle mr-2"></i>Return These Books
+            </button>
+            <a href="{% url 'pos_home' %}" 
+                class="block w-full bg-gray-600 text-white py-5 rounded-lg hover:bg-gray-700 transition font-bold text-xl text-center shadow-lg">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </a>
+        </form>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('select-all');
+    const bookCheckboxes = document.querySelectorAll('.book-checkbox');
+    
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            bookCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+        });
+        
+        bookCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const allChecked = Array.from(bookCheckboxes).every(cb => cb.checked);
+                selectAll.checked = allChecked;
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

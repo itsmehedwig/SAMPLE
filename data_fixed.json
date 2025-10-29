@@ -1,0 +1,223 @@
+﻿[
+{
+  "model": "sessions.session",
+  "pk": "acxhj8ixb2jbedrebl6tla1o9jropvto",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGln-fyjpOYO167VxADlSnFSIu0OkFNC-mXkvlmBbW9pGWdJE7MwkO_1uCPlR-g7oDv028zz3dZmQ7wo_6ODXmcrzcrh_Bw1G-9YeCIVxOguvEH0w0WtJspK1woVSBYHymXKAImx1UhtAqUxEqk77aNj7A-DZN8w:1vAZxQ:SGOSufluMuD3j-UaiN1K-GAl2-KprJBRR1tWKBbJMYE",
+    "expire_date": "2025-11-02T20:24:48.981Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "i8foj5m3afymp0mbu52rea0gwnuqmsbd",
+  "fields": {
+    "session_data": ".eJxVjEsOwjAMBe-SNYqaTwlmyZ4zRHZtkwJKpaZdIe4OlbqA7ZuZ9zIZ16XktcmcRzZn483hdyMcHlI3wHest8kOU13mkeym2J02e51Ynpfd_Tso2Mq3VgEk4RMRHlGY2DGASN8rJNUUo5cOHQ5ONcYOIDighD6QAx-cqHl_ADePOSo:1vAZy8:Uk38jCxBs93oJ1bxcCmYRYXyWivZ3L1kKRUwkkkVuI0",
+    "expire_date": "2025-11-02T20:25:32.063Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "l6iimuw1winrv9x8x4nbh1qkty2t6816",
+  "fields": {
+    "session_data": "eyJzdHVkZW50X2lkIjoiMjMtMTE3OTcifQ:1vAYy4:RcNTPX0UUtRTk8RDytaMNfmHRMgv-DxZwMLGJ7ZsAHQ",
+    "expire_date": "2025-11-02T19:21:24.744Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "u9nxzqtrfrw7ivb22ygmgac2oza13tr6",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGln-fyjpOYO167VxADlSnFSIu0OkFNC-mXkvlmBbW9pGWdJE7MwkO_1uCPlR-g7oDv028zz3dZmQ7wo_6ODXmcrzcrh_Bw1G-9YeCIVxOguvEH0w0WtJspK1woVSBYHymXKAImx1UhtAqUxEqk77aNj7A-DZN8w:1vAhRd:OHokpVU1hzJX8uw5_7_0EGB7BAWLijQHwwW5I4TTc0Y",
+    "expire_date": "2025-11-03T04:24:29.390Z"
+  }
+},
+{
+  "model": "library.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$FVHRsJGK6GHktGcTBnc82w$Ml+kpS+jkqvhWuRNweqNA6zRMmOSnEw8oWKnvPABIU0=",
+    "last_login": "2025-10-20T04:24:29.378Z",
+    "is_superuser": true,
+    "username": "admin_deejay",
+    "email": "admin@library.com",
+    "user_type": "admin",
+    "is_active": true,
+    "is_staff": true,
+    "date_joined": "2025-10-19T17:44:39.680Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "library.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$NcR68LK2VknAoZvIg9HCqO$sM1px80oza6v+9RzW16SW771A31SzAb73Zqd5f0CAzw=",
+    "last_login": "2025-10-19T20:20:24.946Z",
+    "is_superuser": false,
+    "username": "pos",
+    "email": null,
+    "user_type": "pos",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2025-10-19T18:14:26.680Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "library.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$OoPCbECRn3PgbN2US5sAr0$MTmeI1HmuNjbfkJ/73kSI7V6B8u8GEdrG4+XZEN9iXc=",
+    "last_login": "2025-10-19T20:19:54.683Z",
+    "is_superuser": false,
+    "username": "23-11797",
+    "email": "deejay.cristobal@protonmail.com",
+    "user_type": "student",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2025-10-19T20:09:21.139Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "library.student",
+  "pk": 9,
+  "fields": {
+    "user": 10,
+    "student_id": "23-11797",
+    "last_name": "Cristobal",
+    "first_name": "Dee",
+    "middle_name": "Jay",
+    "course": "BSIT",
+    "year": "3",
+    "section": "A NS",
+    "phone_number": "09363822159",
+    "profile_photo": "profile_photos/IMG_20250905_103405_60XPbR2.jpg",
+    "is_verified": false,
+    "is_approved": true,
+    "created_at": "2025-10-19T20:08:07.330Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 2,
+  "fields": {
+    "isbn": "9780747532699",
+    "title": "Harry Potter and the PhilosopherÆs Stone (1997)",
+    "author": "J.K Rowling",
+    "category": "Fantasy",
+    "publisher": "Bloomsbury (UK), Scholastic (US)",
+    "year_published": 1997,
+    "copies_total": 1,
+    "copies_available": 1,
+    "description": "Introduces Harry Potter, a young wizard who discovers his magical heritage and attends Hogwarts School of Witchcraft and Wizardry.",
+    "created_at": "2025-10-20T04:32:40.194Z",
+    "updated_at": "2025-10-20T04:32:40.194Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 3,
+  "fields": {
+    "isbn": "9780747538493",
+    "title": "Harry Potter and the Chamber of Secrets",
+    "author": "J.K Rowling",
+    "category": "Fantasy",
+    "publisher": "Bloomsbury (UK), Scholastic (US)",
+    "year_published": 1998,
+    "copies_total": 1,
+    "copies_available": 1,
+    "description": "In HarryÆs second year at Hogwarts, mysterious attacks occur, leading to the discovery of the hidden Chamber of Secrets.",
+    "created_at": "2025-10-20T04:33:23.749Z",
+    "updated_at": "2025-10-20T04:33:23.749Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 4,
+  "fields": {
+    "isbn": "9780747542153",
+    "title": "Harry Potter and the Prisoner of Azkaban",
+    "author": "J.K Rowling",
+    "category": "Fantasy",
+    "publisher": "Bloomsbury (UK), Scholastic (US)",
+    "year_published": 1999,
+    "copies_total": 1,
+    "copies_available": 1,
+    "description": "Harry learns that Sirius Black, an escaped prisoner, is believed to be after him.",
+    "created_at": "2025-10-20T04:34:01.642Z",
+    "updated_at": "2025-10-20T04:34:01.642Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 5,
+  "fields": {
+    "isbn": "9780747550791",
+    "title": "Harry Potter and the Goblet of Fire",
+    "author": "J.K Rowling",
+    "category": "Fantasy",
+    "publisher": "Bloomsbury (UK), Scholastic (US)",
+    "year_published": 2000,
+    "copies_total": 1,
+    "copies_available": 1,
+    "description": "Harry is unexpectedly entered into the Triwizard Tournament, a magical competition with deadly challenges.",
+    "created_at": "2025-10-20T04:36:59.002Z",
+    "updated_at": "2025-10-20T04:36:59.002Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 6,
+  "fields": {
+    "isbn": "9780747551002",
+    "title": "Harry Potter and the Order of the Phoenix",
+    "author": "J.K Rowling",
+    "category": "Fantasy",
+    "publisher": "Bloomsbury (UK), Scholastic (US)",
+    "year_published": 2003,
+    "copies_total": 1,
+    "copies_available": 1,
+    "description": "Harry forms \"DumbledoreÆs Army\" to combat the Ministry of MagicÆs interference and prepare for VoldemortÆs return.",
+    "created_at": "2025-10-20T04:37:25.167Z",
+    "updated_at": "2025-10-20T04:37:25.167Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 7,
+  "fields": {
+    "isbn": "9780747581085",
+    "title": "Harry Potter and the Half-Blood Prince",
+    "author": "J.K Rowling",
+    "category": "Fantasy",
+    "publisher": "Bloomsbury (UK), Scholastic (US)",
+    "year_published": 2005,
+    "copies_total": 1,
+    "copies_available": 1,
+    "description": "Harry learns more about VoldemortÆs past and searches for the means to defeat him.",
+    "created_at": "2025-10-20T04:37:50.862Z",
+    "updated_at": "2025-10-20T04:37:50.862Z"
+  }
+},
+{
+  "model": "library.book",
+  "pk": 8,
+  "fields": {
+    "isbn": "9780747591059",
+    "title": "Harry Potter and the Deathly Hallows",
+    "author": "J.K Rowling",
+    "category": "Fantasy",
+    "publisher": "Bloomsbury (UK), Scholastic (US)",
+    "year_published": 2007,
+    "copies_total": 1,
+    "copies_available": 1,
+    "description": "Harry, Ron, and Hermione hunt VoldemortÆs Horcruxes, leading to the climactic Battle of Hogwarts.",
+    "created_at": "2025-10-20T04:38:18.011Z",
+    "updated_at": "2025-10-20T04:38:18.011Z"
+  }
+}
+]
