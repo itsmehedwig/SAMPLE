@@ -22,6 +22,13 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.repl.co',
 ]
 
+DEBUG = True
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'library' / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
 # ---------------------------
 # INSTALLED APPS
 # ---------------------------
@@ -161,5 +168,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # ---------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEBUG = False
 ALLOWED_HOSTS = ['*']  # We'll secure later with your domain
