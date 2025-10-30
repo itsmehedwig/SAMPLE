@@ -36,4 +36,22 @@ urlpatterns = [
     path('pos/options/', views.pos_options, name='pos_options'),
     path('pos/borrow/', views.pos_borrow_book, name='pos_borrow_book'),
     path('pos/return/', views.pos_return_book, name='pos_return_book'),
+    path('pos/options/', views.pos_options, name='pos_options'),  # make sure the view name is pos_options
+    
+    path('validate-book-isbn/', views.validate_book_isbn, name='validate_book_isbn'),
+
+    path('pos/', views.pos_home, name='pos_home'),
+    path('pos/validate/', views.validate_student_id, name='validate_student_id'),
+    path('pos/options/', views.pos_options, name='pos_option'),
+    path('pos/remove-book/', views.remove_borrow_book, name='remove_borrow_book'),
+
+    path('validate-student/', views.validate_student_id, name='validate_student_id'),
+    path('pos/borrow/success/<int:transaction_id>/', views.pos_borrow_success, name='pos_borrow_success'),
+    path('pos/borrow/success/<int:transaction_id>/', views.pos_borrow_success, name='pos_borrow_success'),
+    path('pos/borrow/', views.pos_borrow_book, name='pos_borrow_book'),
+    path('pos/borrow/success/<int:transaction_id>/', views.pos_borrow_success, name='pos_borrow_success'),
+    path('pos/borrow/validate/', views.validate_book_isbn, name='validate_book_isbn'),
+    path('validate_student_id/', views.validate_student_id, name='validate_student_id'),
+    path('pos/options/', views.pos_options, name='pos_options'),
+
 ]
