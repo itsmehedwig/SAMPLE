@@ -12,109 +12,423 @@
             <i class="fas fa-times-circle text-3xl"></i>
         </a>
     </div>
-    
-    {% if step == 'add_books' or step == 'confirm' %}
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-600 rounded-lg p-6 mb-8 shadow-md">
-        <h3 class="font-bold text-blue-900 text-xl mb-3">
-            <i class="fas fa-user-circle mr-2"></i>Student Information
+
+    {% if step == "add_books" or step == "confirm" %}
+
+    {% endif %}
+
+    {% if step == "add_books" %}
+    <!-- Add Books Step -->
+    <div class="mb-8">
+        <h3 class="font-bold text-xl mb-4 text-gray-800">
+            <i class="fas fa-list mr-2 text-green-600"></i>Books to Borrow (<span id="totalBooks">{{ books|length }}</span>)
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-700">
-            <p class="text-lg"><strong>Name:</strong> {{ student.get_full_name }}</p>
-            <p class="text-lg"><strong>Student ID:</strong> {{ student.student_id }}</p>
-            <p class="text-lg" colspan="2"><strong>Course:</strong> {{ student.course }} - {{ student.year }} {{ student.section }}</p>
+        <div class="space-y-3" id="booksList">
+            {% for book in books %}
+            <div class="relative border-l-4 border-green-600 bg-green-50 pl-6 pr-10 py-4 rounded-r-lg shadow-sm" id="book-card-{{ book.id }}">
+                <p class="font-bold text-lg text-gray-800">{{ book.title }}</p>
+                <p class="text-gray-600"><strong>ISBN:</strong> {{ book.isbn }}</p>
+                <p class="text-gray-600"><strong>Author:</strong> {{ book.author }}</p>
+                <button type="button"
+                    class="absolute top-2 right-2 text-red-600 font-bold hover:text-red-800"
+                    onclick="removeBook('{{ book.id }}')">&times;</button>
+            </div>
+            {% endfor %}
         </div>
     </div>
-    {% endif %}
-    
-    {% if step == 'add_books' %}
-        {% if books %}
-            <div class="mb-8">
-                <h3 class="font-bold text-xl mb-4 text-gray-800">
-                    <i class="fas fa-list mr-2 text-green-600"></i>Books to Borrow ({{ books|length }})
-                </h3>
-                <div class="space-y-3">
-                    {% for book in books %}
-                        <div class="border-l-4 border-green-600 bg-green-50 pl-6 pr-4 py-4 rounded-r-lg shadow-sm">
-                            <p class="font-bold text-lg text-gray-800">{{ book.title }}</p>
-                            <p class="text-gray-600"><strong>ISBN:</strong> {{ book.isbn }}</p>
-                            <p class="text-gray-600"><strong>Author:</strong> {{ book.author }}</p>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-        
-        <form method="post" class="space-y-6">
-            {% csrf_token %}
-            <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
-                <label class="block text-lg font-semibold text-gray-700 mb-3">
-                    <i class="fas fa-barcode mr-2"></i>Enter Book ISBN
-                </label>
-                <input type="text" name="isbn" required autofocus
-                    class="w-full px-6 py-4 border-2 border-gray-300 rounded-lg text-center text-2xl focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200 transition"
-                    placeholder="Enter ISBN">
-                <p class="text-sm text-gray-500 mt-2 text-center">
-                    Example: 978-3-16-148410-0 or 9783161484100 or ABC123
-                </p>
-            </div>
 
-            <div class="flex gap-4">
-                <button type="submit" name="add_another" 
-                    class="flex-1 bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg shadow-lg transform hover:scale-105">
-                    <i class="fas fa-plus mr-2"></i>Add Another Book
-                </button>
-                <button type="submit" 
-                    class="flex-1 bg-green-600 text-white py-4 rounded-lg hover:bg-green-700 transition font-bold text-lg shadow-lg transform hover:scale-105">
-                    <i class="fas fa-arrow-right mr-2"></i>Continue
-                </button>
-            </div>
-        </form>
-        
-    {% elif step == 'confirm' %}
-        <div class="mb-8">
-            <h3 class="font-bold text-2xl mb-6 text-gray-800 text-center">
-                <i class="fas fa-check-circle mr-2 text-green-600"></i>Review Books to Borrow
-            </h3>
-            <div class="bg-gray-50 rounded-lg p-6 border-2 border-gray-200">
-                <table class="w-full">
-                    <thead class="bg-gray-200 border-b-2 border-gray-300">
-                        <tr>
-                            <th class="px-4 py-3 text-left font-bold text-gray-700">#</th>
-                            <th class="px-4 py-3 text-left font-bold text-gray-700">Book Title</th>
-                            <th class="px-4 py-3 text-left font-bold text-gray-700">ISBN</th>
-                            <th class="px-4 py-3 text-left font-bold text-gray-700">Author</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for book in books %}
-                            <tr class="border-b border-gray-200 hover:bg-green-50 transition">
-                                <td class="px-4 py-3 font-semibold text-gray-600">{{ forloop.counter }}</td>
-                                <td class="px-4 py-3 font-bold text-gray-800">{{ book.title }}</td>
-                                <td class="px-4 py-3 text-gray-600 font-mono">{{ book.isbn }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ book.author }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <div class="mt-4 text-right">
-                    <p class="text-lg font-bold text-gray-700">
-                        Total Books: <span class="text-green-600">{{ books|length }}</span>
-                    </p>
-                </div>
-            </div>
+    <!-- Manual ISBN Input -->
+    <form method="post" class="space-y-6" id="borrowForm">
+        {% csrf_token %}
+        <div id="hiddenIsbnContainer"></div>
+
+        <div class="bg-gray-50 p-6 rounded-lg border-2 border-gray-200">
+            <label class="block text-lg font-semibold text-gray-700 mb-3">
+                <i class="fas fa-barcode mr-2"></i>Enter or Scan Book ISBN
+            </label>
+            <input type="text" id="isbnInput" name="isbn"
+                class="w-full px-6 py-4 border-2 border-gray-300 rounded-lg text-center text-2xl focus:outline-none focus:ring-2 transition"
+                placeholder="Enter ISBN manually or scan barcode" autofocus>
+            <p id="isbnFeedback" class="text-center mt-2 font-semibold"></p>
         </div>
-        
-        <form method="post" class="space-y-4">
+
+        <div class="flex gap-4">
+            <button type="submit" name="add_book"
+                class="flex-1 bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition font-bold text-lg shadow-lg transform hover:scale-105">
+                <i class="fas fa-plus mr-2"></i>Add Book
+            </button>
+            <button type="submit" name="continue_borrow" id="continueBtn"
+                class="flex-1 bg-green-600 text-white py-4 rounded-lg hover:bg-green-700 transition font-bold text-lg shadow-lg transform hover:scale-105">
+                <i class="fas fa-arrow-right mr-2"></i>Continue
+            </button>
+        </div>
+    </form>
+
+    <!-- Hidden scanner input -->
+    <input type="text" id="scannerInput" style="position:absolute; left:-10000px;" autocomplete="off">
+
+    <!-- Modal for errors -->
+    <div id="errorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-sm text-center shadow-2xl">
+            <h3 class="text-lg font-bold mb-4 text-red-600" id="modalTitle">Error</h3>
+            <p class="text-gray-700 mb-6" id="modalMessage"></p>
+            <button onclick="closeModal()"
+                class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-bold">Close</button>
+        </div>
+    </div>
+
+    <script>
+/* ---------- Globals & helpers ---------- */
+const isbnInput = document.getElementById('isbnInput');
+const isbnFeedback = document.getElementById('isbnFeedback');
+const continueBtn = document.getElementById('continueBtn');
+const borrowForm = document.getElementById('borrowForm');
+const modal = document.getElementById('errorModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalMessage = document.getElementById('modalMessage');
+
+function normalizeISBN(isbn) { return isbn.replace(/[^0-9Xx]/g,'').toUpperCase(); }
+
+function showModal(title, message){
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+}
+function closeModal(){
+    modal.classList.remove('flex'); modal.classList.add('hidden');
+}
+
+/* ---------- AJAX helpers (reuse your endpoints) ---------- */
+function addBookServer(isbn){
+    if(!isbn) return;
+    // prevent double-invocation
+    if (addBookServer._running) return;
+    addBookServer._running = true;
+
+    fetch("{% url 'pos_borrow_book' %}",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded",
+            "X-CSRFToken":"{{ csrf_token }}",
+            "X-Requested-With":"XMLHttpRequest"
+        },
+        body: new URLSearchParams({ 'isbn': isbn })
+    })
+    .then(res=>{
+        addBookServer._running = false;
+        if (!res.ok) return res.json().then(j=> { throw j; });
+        return res.json();
+    })
+    .then(data=>{
+        if(data.error) return showModal('Error', data.error);
+        renderBookList(data.books || []);
+        // flash visual confirmation
+        isbnFeedback.textContent = `Added: ${data.books && data.books.length ? (data.books.slice(-1)[0].title) : isbn}`;
+        isbnFeedback.className = 'text-center mt-2 font-semibold text-green-600';
+    })
+    .catch(err=>{
+        addBookServer._running = false;
+        const message = err && err.error ? err.error : 'Failed to add book';
+        showModal('Error', message);
+    });
+}
+addBookServer._running = false;
+
+/* This calls your validate endpoint and returns the parsed JSON */
+function validateIsbnServer(isbn){
+    return fetch("{% url 'validate_book_isbn' %}?isbn="+encodeURIComponent(isbn))
+        .then(res => {
+            if (!res.ok) return res.json().then(j=> Promise.reject(j));
+            return res.json();
+        });
+}
+
+/* Render book list (reuse your function) */
+function renderBookList(books){
+    const container = document.getElementById('booksList');
+    container.innerHTML = '';
+    books.forEach(book=>{
+        const div = document.createElement('div');
+        div.id = `book-card-${book.id}`;
+        div.className = "relative border-l-4 border-green-600 bg-green-50 pl-6 pr-10 py-4 rounded-r-lg shadow-sm";
+        div.innerHTML = `
+            <p class="font-bold text-lg text-gray-800">${book.title}</p>
+            <p class="text-gray-600"><strong>ISBN:</strong> ${book.isbn}</p>
+            <p class="text-gray-600"><strong>Author:</strong> ${book.author}</p>
+            <button type="button" class="absolute top-2 right-2 text-red-600 font-bold hover:text-red-800"
+                onclick="removeBook('${book.id}')">&times;</button>`;
+        container.appendChild(div);
+    });
+    updateTotal && updateTotal();
+}
+
+/* ---------- Live UI validation (manual typing) ---------- */
+let validateTimer = null;
+isbnInput.addEventListener('input', () => {
+    clearTimeout(validateTimer);
+    const raw = isbnInput.value.trim();
+    if (!raw) {
+        isbnInput.classList.remove('border-green-600','border-red-600');
+        isbnFeedback.textContent = '';
+        return;
+    }
+    // debounce while user types
+    validateTimer = setTimeout(() => {
+        const isbn = normalizeISBN(raw);
+        // call server validation
+        validateIsbnServer(isbn)
+        .then(data=>{
+            if (data.valid && !data.unavailable) {
+                isbnInput.classList.remove('border-red-600');
+                isbnInput.classList.add('border-green-600');
+                isbnFeedback.textContent = data.book.title;
+                isbnFeedback.className = 'text-center mt-2 font-semibold text-green-600';
+            } else if (data.valid && data.unavailable) {
+                isbnInput.classList.remove('border-green-600');
+                isbnInput.classList.add('border-red-600');
+                isbnFeedback.textContent = `${data.book.title} (Unavailable)`;
+                isbnFeedback.className = 'text-center mt-2 font-semibold text-red-600';
+            } else {
+                isbnInput.classList.remove('border-green-600');
+                isbnInput.classList.add('border-red-600');
+                isbnFeedback.textContent = 'Book not found';
+                isbnFeedback.className = 'text-center mt-2 font-semibold text-red-600';
+            }
+        })
+        .catch(err=>{
+            isbnInput.classList.remove('border-green-600');
+            isbnInput.classList.add('border-red-600');
+            isbnFeedback.textContent = (err && err.reason) ? err.reason : 'Error checking ISBN';
+            isbnFeedback.className = 'text-center mt-2 font-semibold text-red-600';
+        });
+    }, 300);
+});
+
+/* Manual Enter to add */
+isbnInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        const isbn = normalizeISBN(isbnInput.value.trim());
+        if (!isbn) { showModal('Error','Please enter or scan an ISBN'); return; }
+        addBookServer(isbn);
+        isbnInput.value = ''; isbnFeedback.textContent = '';
+    }
+});
+
+/* ---------- Scanner detection (global keystroke buffer) ---------- */
+/*
+  Logic:
+  - Capture all keydown events globally into buffer with timestamps.
+  - When Enter is pressed, compute interval from first->last char.
+  - If the entire burst was fast (e.g. < 300ms) treat as scanner.
+  - Otherwise treat as manual Enter (handled above).
+  - This works even when you click the visible input: scanner bursts still get detected.
+*/
+let keyBuffer = [];
+let bufferTimer = null;
+const SCAN_MAX_DURATION_MS = 300; // adjust if your scanner slower
+const SCAN_MIN_LENGTH = 6; // typical barcode lengths; lower if needed
+
+document.addEventListener('keydown', (e) => {
+    // Ignore modifier-only
+    if (e.key.length !== 1 && e.key !== 'Enter') return;
+
+    const now = Date.now();
+
+    // start new buffer if empty
+    if (keyBuffer.length === 0) {
+        keyBuffer.push({ key: e.key, time: now });
+    } else {
+        keyBuffer.push({ key: e.key, time: now });
+    }
+
+    // clear previous timer
+    if (bufferTimer) clearTimeout(bufferTimer);
+
+    // set a short timeout to clear buffer if no further input
+    bufferTimer = setTimeout(() => { keyBuffer = []; bufferTimer = null; }, 1000);
+
+    // If Enter pressed, evaluate buffer
+    if (e.key === 'Enter') {
+        // build string excluding the Enter
+        const chars = keyBuffer.filter(k => k.key !== 'Enter');
+        const len = chars.length;
+        const duration = len ? (chars[chars.length - 1].time - chars[0].time) : 0;
+
+        // reset buffer immediately
+        keyBuffer = [];
+        if (bufferTimer) { clearTimeout(bufferTimer); bufferTimer = null; }
+
+        // If it looks like a scanner burst, process as scan
+        if (len >= SCAN_MIN_LENGTH && duration <= SCAN_MAX_DURATION_MS) {
+            const raw = chars.map(c => c.key).join('');
+            const isbn = normalizeISBN(raw);
+            if (!isbn) return;
+            // show quick feedback while processing
+            isbnInput.classList.remove('border-red-600'); isbnInput.classList.add('border-green-600');
+            isbnFeedback.textContent = 'Scanning...'; isbnFeedback.className = 'text-center mt-2 font-semibold text-gray-600';
+            // Validate, then auto-add if valid and available
+            validateIsbnServer(isbn)
+            .then(data => {
+                if (data.valid && !data.unavailable) {
+                    // auto add
+                    addBookServer(isbn);
+                } else if (data.valid && data.unavailable) {
+                    isbnInput.classList.remove('border-green-600'); isbnInput.classList.add('border-red-600');
+                    isbnFeedback.textContent = `${data.book.title} (Unavailable)`; isbnFeedback.className='text-center mt-2 font-semibold text-red-600';
+                    showModal('Unavailable', `${data.book.title} is currently unavailable`);
+                } else {
+                    isbnInput.classList.remove('border-green-600'); isbnInput.classList.add('border-red-600');
+                    isbnFeedback.textContent = 'Book not found'; isbnFeedback.className='text-center mt-2 font-semibold text-red-600';
+                    showModal('Not Found','Book not found in system');
+                }
+                // clear visible input (if scanner accidentally typed into it)
+                isbnInput.value = '';
+            })
+            .catch(err=>{
+                isbnInput.classList.remove('border-green-600'); isbnInput.classList.add('border-red-600');
+                isbnFeedback.textContent = 'Server error'; isbnFeedback.className='text-center mt-2 font-semibold text-red-600';
+            });
+
+        } else {
+            // Likely manual Enter — allow existing handler on isbnInput to handle it
+            // If Enter occurred while user focused another element, copy typed value into isbnInput
+            // Build the typed string and put into visible input if it's empty
+            // (This helps when scanner inputs into a focused field)
+            const raw = chars.map(c => c.key).join('');
+            if (document.activeElement !== isbnInput && raw.trim().length > 0) {
+                isbnInput.value = raw;
+                // trigger manual add behavior (press Enter)
+                const isbn = normalizeISBN(raw);
+                if (isbn) {
+                    // small timeout so visible input UI updates
+                    setTimeout(()=>{ addBookServer(isbn); isbnInput.value=''; isbnFeedback.textContent=''; }, 50);
+                }
+            }
+        }
+    }
+});
+
+/* ---------- Keep input focused (but don't steal focus if user wants to type) ---------- */
+/* We no longer forcibly focus the hidden input. The global listener handles scanner bursts.
+   But it's helpful to focus the visible ISBN input on click so user can type. */
+document.addEventListener('click', (e) => {
+    if (e.target === isbnInput || isbnInput.contains(e.target)) {
+        isbnInput.focus();
+    }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const isbnInput = document.getElementById("isbn");
+  const studentId = "{{ student.student_id }}";
+  isbnInput.removeAttribute("readonly");
+
+  let timeout;
+  isbnInput.addEventListener("input", () => {
+    clearTimeout(timeout);
+    const isbn = isbnInput.value.trim();
+    if (isbn.length >= 3) {
+      timeout = setTimeout(() => {
+        fetch(`/pos/borrow/?student_id=${studentId}&isbn=${isbn}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              alert(data.message);
+              isbnInput.value = "";
+              location.reload();
+            } else {
+              alert(data.message);
+            }
+          })
+          .catch(() => alert("❌ Failed to add book."));
+      }, 400);
+    }
+  });
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const isbnInput = document.getElementById("isbn");
+  const studentId = "{{ student.student_id }}";
+  isbnInput.removeAttribute("readonly");
+
+  let timeout;
+  isbnInput.addEventListener("input", () => {
+    clearTimeout(timeout);
+    const isbn = isbnInput.value.trim();
+    if (isbn.length < 3) return;
+
+    timeout = setTimeout(() => {
+      fetch(`/pos/borrow/?student_id=${studentId}&isbn=${encodeURIComponent(isbn)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            isbnInput.style.borderColor = "green";
+            isbnInput.style.backgroundColor = "#d1fae5";
+            console.log("✅", data.message);
+            isbnInput.value = "";
+            location.reload();
+          } else {
+            isbnInput.style.borderColor = "red";
+            isbnInput.style.backgroundColor = "#fee2e2";
+            console.log("❌", data.message);
+          }
+        })
+        .catch(err => {
+          console.error("❌ Fetch error:", err);
+          alert("Server error while scanning book.");
+        });
+    }, 200);
+  });
+});
+</script>
+
+
+
+{% endif %}
+
+{% if step == "confirm" %}
+<!-- Confirm Step -->
+<div class="mb-8">
+    <h3 class="font-bold text-2xl mb-6 text-gray-800 text-center">
+        <i class="fas fa-check-circle mr-2 text-green-600"></i>Review Books to Borrow
+    </h3>
+    <div class="bg-gray-50 rounded-lg p-6 border-2 border-gray-200">
+        <table class="w-full">
+            <thead class="bg-gray-200 border-b-2 border-gray-300">
+                <tr>
+                    <th class="px-4 py-3 text-left font-bold text-gray-700">#</th>
+                    <th class="px-4 py-3 text-left font-bold text-gray-700">Book Title</th>
+                    <th class="px-4 py-3 text-left font-bold text-gray-700">ISBN</th>
+                    <th class="px-4 py-3 text-left font-bold text-gray-700">Author</th>
+                </tr>
+            </thead>
+            <tbody id="confirmBooksList">
+                {% for book in books %}
+                <tr>
+                    <td class="px-4 py-3 font-semibold text-gray-600">{{ forloop.counter }}</td>
+                    <td class="px-4 py-3 font-bold text-gray-800">{{ book.title }}</td>
+                    <td class="px-4 py-3 text-gray-600 font-mono">{{ book.isbn }}</td>
+                    <td class="px-4 py-3 text-gray-600">{{ book.author }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-4 text-right font-bold text-gray-700">
+            Total Books: <span class="text-green-600">{{ books|length }}</span>
+        </div>
+
+        <form method="post" class="mt-4 space-y-4">
             {% csrf_token %}
-            <button type="submit" name="confirm_borrow" 
+            <button type="submit" name="confirm_borrow"
                 class="w-full bg-green-600 text-white py-5 rounded-lg hover:bg-green-700 transition font-bold text-xl shadow-2xl transform hover:scale-105">
                 <i class="fas fa-check-circle mr-2"></i>Borrow These Books
             </button>
-            <a href="{% url 'pos_home' %}" 
+            <a href="{% url 'pos_home' %}"
                 class="block w-full bg-gray-600 text-white py-5 rounded-lg hover:bg-gray-700 transition font-bold text-xl text-center shadow-lg">
                 <i class="fas fa-times mr-2"></i>Cancel
             </a>
         </form>
-    {% endif %}
+    </div>
+</div>
+{% endif %}
+
 </div>
 {% endblock %}
